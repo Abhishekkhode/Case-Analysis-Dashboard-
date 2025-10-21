@@ -4,6 +4,8 @@ from datetime import timedelta, date
 import plotly.express as px
 import io
 import streamlit.components.v1 as components
+from dotenv import load_dotenv
+import os
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
@@ -11,20 +13,17 @@ st.set_page_config(
     page_icon="📅",
     # layout="wide",
 )
+load_dotenv()
 
-# --- STATUS DEFINITIONS ---
-# IMPORTANT: Edit these lists if your status names are different.
-OPEN_STATUSES = ['New', 'In Process', 'Waiting for customer response', 'ON HOLD (Bug/Enhancement)', 'Reopened']
-OPEN_STATUSESAVG = ['New', 'In Process','Reopened']
-CLOSED_STATUSES = ['Closed - Complete']
-selected_owners = ['Manasa Lakshmi', 'Akhila Kotha', 'Surendra Moilla']
+def get_status_list(env_key):
+    value = os.getenv(env_key, "")
+    return [status.strip() for status in value.split(",") if status.strip()]
 
-# Helper Function
+OPEN_STATUSES = get_status_list("OPEN_STATUSES")
+CLOSED_STATUSES = get_status_list("CLOSED_STATUSES")
+OPEN_STATUSES_AVG = get_status_list("OPEN_STATUSES_AVG")
+selected_owners = get_status_list("SELECTED_OWNERS")
 
-# (Make sure you have this import at the top of your script)
-# import streamlit.components.v1 as components
-
-# Replace your function with this new, complete version
 def add_pdf_export():
     """
     Adds CSS for a perfectly structured, print-friendly PDF export and a button to trigger it.
@@ -256,6 +255,7 @@ if uploaded_file:
         closed_in_period_df = pd.DataFrame()
         if 'Case Last Modified Date' in df.columns:
              closed_in_period_df = df[
+                 
                 (df['Case Last Modified Date'] >= start_date_dt) & 
                 (df['Case Last Modified Date'] <= end_date_dt) &
                 (df['Status'].isin(CLOSED_STATUSES))
