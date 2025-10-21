@@ -6,6 +6,7 @@ import io
 import streamlit.components.v1 as components
 from dotenv import load_dotenv
 import os
+import plotly.io as pio
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
@@ -13,6 +14,15 @@ st.set_page_config(
     page_icon="📅",
     # layout="wide",
 )
+
+os.environ["KALEIDO_CHROME_PATH"] = "/usr/bin/chromium"
+# pio.kaleido.scope.chromium_executable = None
+pio.renderers.default = "png" 
+# Example figure
+fig = px.bar(x=["A", "B", "C"], y=[1, 3, 2])
+
+# Convert to image
+img_bytes = fig.to_image(format="png")
 load_dotenv()
 
 def get_status_list(env_key):
@@ -21,7 +31,7 @@ def get_status_list(env_key):
 
 OPEN_STATUSES = get_status_list("OPEN_STATUSES")
 CLOSED_STATUSES = get_status_list("CLOSED_STATUSES")
-OPEN_STATUSES_AVG = get_status_list("OPEN_STATUSES_AVG")
+OPEN_STATUSESAVG = get_status_list("OPEN_STATUSES_AVG")
 selected_owners = get_status_list("SELECTED_OWNERS")
 
 def add_pdf_export():
@@ -500,7 +510,7 @@ if uploaded_file:
             
             st.markdown("---") # Add a separator after each product line's analysis
         st.header("Year-to-Date Open Case Backlog Analysis")
-        st.info("This analysis shows the backlog of open cases from January 1st to today, assigned only to 'demo', 'user', and 'admin'.")
+        st.info("This analysis shows the backlog of open cases from January 1st to today, assigned only to Users Defined in .env file.")
 
         today = date.today()
         start_of_year = date(today.year, 1, 1)
@@ -816,3 +826,49 @@ if uploaded_file:
 
 else:
     st.info("Please upload an Excel file to get started.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
