@@ -447,7 +447,8 @@ if uploaded_file:
                 (df['Opened Date'] <= pd.to_datetime(today)) &
                 (df['Status'].isin(OPEN_STATUSES)) &
                 (df['Product Line'] == product) &
-                (df['Type']!=type)
+                (df['Type']!=type) &
+                (df['Case Owner'].isin(selected_owners))
             ].copy()
 
             # --- THIS IS THE ADDED LINE ---

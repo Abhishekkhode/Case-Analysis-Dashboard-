@@ -2,5 +2,5 @@ streamlit
 pandas
 openpyxl
 plotly
-kaleido
+kaleido==0.2.1
 python-dotenv
